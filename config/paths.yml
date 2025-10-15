@@ -1,0 +1,41 @@
+project:
+  seed: 42
+
+data:
+  root_dir: ../test1
+  train_csv: dataset/train.csv
+  test_csv: dataset/test.csv
+  image_dir: images
+  catalog_db: catalog.db
+  extra_features_dir: dataset/feature_cache
+
+model:
+  bert:
+    pretrained_name: distilbert-base-uncased
+    max_length: 384
+    dropout: 0.1
+    learning_rate: 5.0e-5
+    weight_decay: 0.01
+    num_epochs: 5
+    batch_size: 16
+    gradient_accumulation_steps: 1
+    warmup_ratio: 0.1
+    validation_size: 0.1
+    early_stopping_patience: 3
+    scheduler: cosine
+    grad_clip_norm: 1.0
+    dataloader_num_workers: 2
+
+paths:
+  checkpoints_dir: checkpoints/bert
+  outputs_dir: outputs
+  logs_dir: outputs/logs
+  predictions_dir: outputs/predictions
+  splits_dir: outputs/splits
+  hf_cache_dir: ~/.cache/huggingface
+
+ensemble:
+  prediction_sources:
+    - outputs/predictions/bert.csv
+    - outputs/predictions/vision.csv
+    - outputs/predictions/xgboost.csv
